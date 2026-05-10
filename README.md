@@ -88,7 +88,6 @@ If you build this inside your software, you couple AI iteration speed to your re
                                           ▼
                             ┌──────────────────────────┐
                             │         augchatd         │
-                            │  (tool-use loop server)  │
                             └─────────────┬────────────┘
                                           │
                        2. returns { session_id, jwt }
@@ -96,7 +95,7 @@ If you build this inside your software, you couple AI iteration speed to your re
                                           ▼
    ┌──────────────────────────┐    3. chat (JWT)    ┌──────────────────────────┐
    │  Your software's UI      │ ──────────────────► │         augchatd         │
-   │  (browser / iframe)      │ ◄── streamed reply ─│                          │
+   │  (browser / iframe)      │ ◄── streamed reply ─│  (tool-use loop server)  │
    └──────────────────────────┘                     └──────────────────────────┘
                                                                 │
                                                                 ▼
