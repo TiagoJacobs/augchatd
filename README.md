@@ -2,15 +2,6 @@
 
 > Add chat with tools and RAG to your app in an afternoon. Your existing auth provisions each session. No keys in the browser.
 
-> [!CAUTION]
-> 🔴 **PLACEHOLDER: Status badges.** Once published: npm version, build status, MIT license, Docker pulls. Renders as a row of shields.io badges right under the tagline.
-
-> [!CAUTION]
-> 🔴 **PLACEHOLDER: Demo GIF (10s loop).** Show: user asks a question → tool-call indicator appears ("searching docs...") → streamed answer with citations. Single most impactful missing piece for the WOW factor.
-
-> [!CAUTION]
-> 🔴 **PLACEHOLDER: Live demo link.** Hosted public instance where readers can chat without any setup. One sentence + URL.
-
 ```bash
 # Your backend, once per chat session:
 curl -X POST https://augchatd.your-infra/sessions \
@@ -40,38 +31,6 @@ curl -X POST https://augchatd.your-infra/sessions \
 ```
 
 The browser never sees the LLM key, the MCP credentials, or the RAG endpoint. Only your server-issued JWT, valid for minutes.
-
-## Stop / Start
-
-**Stop:**
-- Putting LLM keys in your frontend bundle
-- Reimplementing user management inside your AI service
-- Coupling AI iteration to your main app's release cycle
-- Letting the browser talk to MCP servers directly
-
-**Start:**
-- Treating chat as a service your existing app provisions per session
-- Keeping every credential server-side, where it already lives
-- Shipping a chat PoC the same afternoon, via iframe, with no framework migration
-
-## Quick Start
-
-> [!CAUTION]
-> 🔴 **PLACEHOLDER: Functional Quick Start.** Goal: 5 commands or fewer, working chat in under 5 minutes. Should cover: pull/run the container, mint a session via curl, open the reference UI, paste the JWT. Fill in once the server has a runnable v0.
-
-## The problem this solves
-
-You're adding AI chat to your software. You need:
-
-- An LLM streaming responses
-- **MCP tools** (search your data, take actions)
-- **RAG** (retrieval from your indexes)
-- **Multi-tenant isolation** (each user only sees what they're allowed to)
-- **No credentials in the browser**, ever
-
-If you build this inside your software, you couple AI iteration speed to your release cycle, and your AI dependencies bloat your main app. If you build it as a separate service, you typically end up reimplementing user management, permissions, and multi-tenancy.
-
-**augchatd is the separate service that doesn't reimplement any of that.** Your software stays the source of truth for *who can do what*. augchatd just runs the chat, with whatever credentials, tools, and prompt your software hands it for that session.
 
 ## How it works
 
@@ -110,7 +69,18 @@ If you build this inside your software, you couple AI iteration speed to your re
 1. **Your backend → augchatd** (mTLS): "Create a session for `user_42` with these MCP servers, this RAG endpoint, this LLM and key, this system prompt." augchatd returns a short-lived JWT.
 2. **Browser → augchatd** (JWT): chat. augchatd loops between the LLM, MCP servers, and RAG endpoint server-side. Browser only sees the streamed reply and sanitized tool indicators.
 
-Credentials live in your software's vault. They transit to augchatd via the setup call. The browser never sees them.
+## Stop / Start
+
+**Stop:**
+- Putting LLM keys in your frontend bundle
+- Reimplementing user management inside your AI service
+- Coupling AI iteration to your main app's release cycle
+- Letting the browser talk to MCP servers directly
+
+**Start:**
+- Treating chat as a service your existing app provisions per session
+- Keeping every credential server-side, where it already lives
+- Shipping a chat PoC the same afternoon, via iframe, with no framework migration
 
 ## What augchatd does
 
@@ -142,9 +112,6 @@ We recommend [assistant-ui](https://github.com/assistant-ui/assistant-ui) as the
 3. Your application passes the JWT to the iframe via `postMessage` once it signals readiness.
 
 This gets you a working chat in hours, with no changes to your app's framework, bundle, or build pipeline. And it isn't just a stepping stone: many integrations stay on the iframe path indefinitely. If you ever need more control, the same API supports native integrations too.
-
-> [!CAUTION]
-> 🔴 **PLACEHOLDER: Screenshot of the iframe-embedded reference UI.** Show the chat rendering inside a host application, ideally with a tool call expanded so the reader sees the streaming + tool indicator pattern.
 
 ## Why these constraints
 
